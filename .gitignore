@@ -1,6 +1,9 @@
 # Python cache environments
 __pycache__/
 *.pyc
+venv/
+.venv/
+env/
 
 # Heavy data directories
 data/
