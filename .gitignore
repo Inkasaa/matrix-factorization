@@ -1,1 +1,12 @@
-venv
+# Python cache environments
+__pycache__/
+*.pyc
+
+# Heavy data directories
+data/
+processed/
+
+# Built binary model matrices and model logs
+*.npy
+*.pkl
+reports/svd_predictions.npy
