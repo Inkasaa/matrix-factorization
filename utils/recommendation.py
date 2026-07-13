@@ -20,6 +20,19 @@ def load_pmf_prediction_matrix(num_users=6040, num_movies=3706):
     except FileNotFoundError:
         return np.random.uniform(3.0, 4.5, (num_users, num_movies))
 
+
+def load_svd_prediction_matrix(num_users=6040, num_movies=3706):
+    try:
+        predicted_matrix = np.load("reports/svd_predictions.npy")
+        if predicted_matrix.shape[0] < num_users or predicted_matrix.shape[1] < num_movies:
+            padded = np.full((num_users, num_movies), 3.5)
+            padded[:predicted_matrix.shape[0], :predicted_matrix.shape[1]] = predicted_matrix
+            return np.clip(padded, 1.0, 5.0)
+        return np.clip(predicted_matrix[:num_users, :num_movies], 1.0, 5.0)
+    except FileNotFoundError:
+        return np.random.uniform(2.5, 4.5, (num_users, num_movies))
+
+
 def generate_recommendations(user_id, model_type="PMF", top_n=10, show_worst=False):
     movies_df = load_movies()
     ratings_df = load_ratings()

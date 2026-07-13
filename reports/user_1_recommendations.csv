@@ -7,6 +7,7 @@ Movie ID,Title,Genres,Predicted Rating
 1178,Paths of Glory (1957),Drama|War,4.27
 926,All About Eve (1950),Drama,4.27
 668,Pather Panchali (1955),Drama,4.26
+527,Schindler's List (1993),Drama|War,4.26
 2360,"Celebration, The (Festen) (1998)",Drama,4.26
 678,Some Folks Call It a Sling Blade (1993),Drama|Thriller,4.25
 3030,Yojimbo (1961),Comedy|Drama|Western,4.25
@@ -18,4 +19,3 @@ Movie ID,Title,Genres,Predicted Rating
 1945,On the Waterfront (1954),Crime|Drama,4.24
 3730,"Conversation, The (1974)",Drama|Mystery,4.24
 3089,"Bicycle Thief, The (Ladri di biciclette) (1948)",Drama,4.24
-1213,GoodFellas (1990),Crime|Drama,4.24

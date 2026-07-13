@@ -1,51 +1,21 @@
 Movie ID,Title,Genres,Predicted Rating
-849,Escape from L.A. (1996),Action|Adventure|Sci-Fi|Thriller,4.25
-1129,Escape from New York (1981),Action|Adventure|Sci-Fi|Thriller,4.23
-1917,Armageddon (1998),Action|Adventure|Sci-Fi|Thriller,4.21
-546,Super Mario Bros. (1993),Action|Adventure|Children's|Sci-Fi,4.21
-2987,Who Framed Roger Rabbit? (1988),Adventure|Animation|Film-Noir,4.21
-2899,Gulliver's Travels (1939),Adventure|Animation|Children's,4.2
-1210,Star Wars: Episode VI - Return of the Jedi (1983),Action|Adventure|Romance|Sci-Fi|War,4.19
-2093,Return to Oz (1985),Adventure|Children's|Fantasy|Sci-Fi,4.19
-1049,"Ghost and the Darkness, The (1996)",Action|Adventure,4.19
-2950,"Blue Lagoon, The (1980)",Adventure|Drama|Romance,4.19
-2916,Total Recall (1990),Action|Adventure|Sci-Fi|Thriller,4.18
-1197,"Princess Bride, The (1987)",Action|Adventure|Comedy|Romance,4.18
-158,Casper (1995),Adventure|Children's,4.18
-2162,"NeverEnding Story II: The Next Chapter, The (1990)",Adventure|Children's|Fantasy,4.18
-592,Batman (1989),Action|Adventure|Crime|Drama,4.18
-2054,"Honey, I Shrunk the Kids (1989)",Adventure|Children's|Comedy|Fantasy|Sci-Fi,4.18
-3172,Ulysses (Ulisse) (1954),Adventure,4.17
-1031,Bedknobs and Broomsticks (1971),Adventure|Children's|Musical,4.17
-1204,Lawrence of Arabia (1962),Adventure|War,4.17
-1849,Prince Valiant (1997),Adventure,4.17
-1127,"Abyss, The (1989)",Action|Adventure|Sci-Fi|Thriller,4.17
-2161,"NeverEnding Story, The (1984)",Adventure|Children's|Fantasy,4.17
-2115,Indiana Jones and the Temple of Doom (1984),Action|Adventure,4.17
-2099,Song of the South (1946),Adventure|Animation|Children's|Musical,4.16
-3771,"Golden Voyage of Sinbad, The (1974)",Action|Adventure,4.16
-3673,Benji the Hunted (1987),Adventure|Children's,4.16
-2368,King Kong Lives (1986),Action|Adventure|Horror,4.16
-464,Hard Target (1993),Action|Adventure|Crime|Thriller,4.16
-558,"Pagemaster, The (1994)",Action|Adventure|Animation|Children's|Fantasy,4.16
+1204,Lawrence of Arabia (1962),Adventure|War,4.24
+1198,Raiders of the Lost Ark (1981),Action|Adventure,4.23
+2905,Sanjuro (1962),Action|Adventure,4.22
+1262,"Great Escape, The (1963)",Adventure|War,4.22
+1216,"Big Blue, The (Le Grand Bleu) (1988)",Adventure|Romance,4.21
+590,Dances with Wolves (1990),Adventure|Drama|Western,4.19
+1254,"Treasure of the Sierra Madre, The (1948)",Adventure,4.19
+1274,Akira (1988),Adventure|Animation|Sci-Fi|Thriller,4.19
+919,"Wizard of Oz, The (1939)",Adventure|Children's|Drama|Musical,4.19
+1275,Highlander (1986),Action|Adventure,4.19
+260,Star Wars: Episode IV - A New Hope (1977),Action|Adventure|Fantasy|Sci-Fi,4.18
+1615,"Edge, The (1997)",Adventure|Thriller,4.18
+3104,Midnight Run (1988),Action|Adventure|Comedy|Crime,4.18
+3000,"Princess Mononoke, The (Mononoke Hime) (1997)",Action|Adventure|Animation,4.18
+1967,Labyrinth (1986),Adventure|Children's|Fantasy,4.17
+1197,"Princess Bride, The (1987)",Action|Adventure|Comedy|Romance,4.17
+380,True Lies (1994),Action|Adventure|Comedy|Romance,4.16
+1259,Stand by Me (1986),Adventure|Comedy|Drama,4.16
+897,For Whom the Bell Tolls (1943),Adventure|War,4.16
 29,"City of Lost Children, The (1995)",Adventure|Sci-Fi,4.16
-1198,Raiders of the Lost Ark (1981),Action|Adventure,4.16
-316,Stargate (1994),Action|Adventure|Sci-Fi,4.16
-552,"Three Musketeers, The (1993)",Action|Adventure|Comedy,4.15
-1030,Pete's Dragon (1977),Adventure|Animation|Children's|Musical,4.15
-146,"Amazing Panda Adventure, The (1995)",Adventure|Children's,4.15
-1587,Conan the Barbarian (1982),Action|Adventure,4.15
-1287,Ben-Hur (1959),Action|Adventure|Drama,4.15
-919,"Wizard of Oz, The (1939)",Adventure|Children's|Drama|Musical,4.15
-940,"Adventures of Robin Hood, The (1938)",Action|Adventure,4.15
-3139,Tarzan the Fearless (1933),Action|Adventure,4.15
-897,For Whom the Bell Tolls (1943),Adventure|War,4.15
-3153,"7th Voyage of Sinbad, The (1958)",Action|Adventure|Fantasy,4.15
-653,Dragonheart (1996),Action|Adventure|Fantasy,4.15
-2006,"Mask of Zorro, The (1998)",Action|Adventure|Romance,4.15
-258,"Kid in King Arthur's Court, A (1995)",Adventure|Children's|Comedy|Fantasy|Romance,4.14
-1744,Firestorm (1998),Action|Adventure|Thriller,4.14
-1538,"Second Jungle Book: Mowgli & Baloo, The (1997)",Adventure|Children's,4.14
-1377,Batman Returns (1992),Action|Adventure|Comedy|Crime,4.14
-2617,"Mummy, The (1999)",Action|Adventure|Horror|Thriller,4.14
-1551,Buddy (1997),Adventure|Children's|Drama,4.14

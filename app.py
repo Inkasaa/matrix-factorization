@@ -3,19 +3,26 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import json
+from scipy.stats import gaussian_kde
+import plotly.graph_objects as go
 from utils.data_loader import load_movies, load_ratings
-from utils.recommendation import generate_recommendations, save_comparison_plots
+from utils.recommendation import (
+    generate_recommendations,
+    save_comparison_plots,
+    load_pmf_prediction_matrix,
+    load_svd_prediction_matrix,
+)
 
 st.set_page_config(
-    page_title="01.edu gritlab Matrix-factorization", 
-    layout="wide", 
+    page_title="01.edu gritlab Matrix-factorization",
+    layout="wide",
     initial_sidebar_state="expanded"
 )
 
 # Title & Context - 01.edu gritlab Header
 st.title("🎬 01.edu gritlab Matrix-factorization")
 st.markdown("""
-*This project explores collaborative filtering algorithms using the MovieLens 1M dataset. 
+*This project explores collaborative filtering algorithms using the MovieLens 1M dataset.
 We analyze a baseline Singular Value Decomposition (SVD) approach against a Biased Probabilistic Matrix Factorization (PMF) algorithm.*
 """)
 st.write("---")
@@ -39,13 +46,26 @@ try:
     ratings_df, movies_df = fetch_user_history_assets()
     
     if app_mode == "Inspect Existing User":
+        max_user_id = 6040  # Assuming the dataset has user IDs from 1 to 6040
         user_id = st.sidebar.number_input(
-            "Enter User ID to Inspect:", 
-            min_value=1, max_value=6040, value=1, step=1
+            "Enter User ID to Inspect:",
+            min_value=1,
+            max_value=max_user_id,
+            value=1,
+            step=1,
         )
         
+        # Validate user exists
+        user_all_ratings = ratings_df[ratings_df["user_id"] == int(user_id)]
+        if user_all_ratings.empty:
+            st.error(
+                f"❌ **User ID {user_id} not found in dataset.**\n\n"
+                f"Valid user IDs range from 1 to {max_user_id}.\n\n"
+                f"Please select a different user ID using the sidebar slider."
+            )
+            st.stop()
+
         # Process User Profile Statistics
-        user_all_ratings = ratings_df[ratings_df["user_id"] == user_id]
         total_reviews_count = len(user_all_ratings)
         user_history_complete = user_all_ratings.merge(movies_df, on="movie_id").sort_values(by="rating", ascending=False)
         
@@ -138,6 +158,140 @@ try:
                     st.caption("💡 **Why PMF prioritized these:** Surfaced by mapping abstract taste features against highly correlated user clusters.")
             elif not pmf_recs.empty and show_worst:
                 st.caption("💡 **Why these are the worst:** These movies have latent attributes that strongly clash with your estimated profile coefficients.")
+
+        svd_matrix = load_svd_prediction_matrix(num_users=6040, num_movies=len(movies_df))
+        pmf_matrix = load_pmf_prediction_matrix(num_users=6040, num_movies=len(movies_df))
+
+        common_users = min(svd_matrix.shape[0], pmf_matrix.shape[0])
+        common_movies = min(svd_matrix.shape[1], pmf_matrix.shape[1])
+        svd_matrix = svd_matrix[:common_users, :common_movies]
+        pmf_matrix = pmf_matrix[:common_users, :common_movies]
+
+        user_idx = max(0, min(user_id - 1, common_users - 1))
+
+        def plot_rating_distributions(user_idx, svd_preds, pmf_preds):
+            u_svd = np.asarray(svd_preds[user_idx])
+            u_pmf = np.asarray(pmf_preds[user_idx])
+            x = np.linspace(1.0, 5.0, 400).tolist()
+
+            fig = go.Figure()
+
+            def _add_density(values, color, name):
+                values_list = values.tolist()
+                if len(np.unique(values)) > 1:
+                    try:
+                        kde = gaussian_kde(values)
+                        y = kde(np.linspace(1.0, 5.0, 400)).tolist()
+                        fig.add_trace(go.Scatter(
+                            x=x,
+                            y=y,
+                            fill='tozeroy',
+                            name=name,
+                            line=dict(color=color),
+                            opacity=0.7,
+                        ))
+                    except Exception:
+                        fig.add_trace(go.Histogram(
+                            x=values_list,
+                            histnorm='density',
+                            name=name,
+                            marker_color=color,
+                            opacity=0.5,
+                        ))
+                else:
+                    fig.add_trace(go.Scatter(
+                        x=[float(values_list[0]), float(values_list[0])],
+                        y=[0, 1.0],
+                        mode='lines',
+                        line=dict(color=color, dash='dash'),
+                        name=name,
+                    ))
+
+            _add_density(u_svd, "#1f77b4", "SVD Predictions")
+            _add_density(u_pmf, "#ff7f0e", "PMF Predictions")
+
+            fig.update_layout(
+                title=f"Prediction Density Profile for User {user_id}",
+                xaxis_title="Predicted Rating Score",
+                yaxis_title="Density",
+                xaxis=dict(range=[1.0, 5.0]),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                margin=dict(l=40, r=30, t=60, b=40),
+                template="plotly_white",
+            )
+            return fig
+
+        def plot_prediction_agreement(user_idx, svd_preds, pmf_preds):
+            u_svd = np.asarray(svd_preds[user_idx])
+            u_pmf = np.asarray(pmf_preds[user_idx])
+            minimum = float(min(np.nanmin(u_svd), np.nanmin(u_pmf), 1.0))
+            maximum = float(max(np.nanmax(u_svd), np.nanmax(u_pmf), 5.0))
+
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(
+                x=u_svd.tolist(),
+                y=u_pmf.tolist(),
+                mode='markers',
+                marker=dict(color='#673ab7', opacity=0.25),
+                name='Predictions',
+            ))
+            fig.add_trace(go.Scatter(
+                x=[minimum, maximum],
+                y=[minimum, maximum],
+                mode='lines',
+                line=dict(color='red', dash='dash'),
+                name='Perfect Agreement',
+            ))
+
+            fig.update_layout(
+                title="Model Dissonance Mapping",
+                xaxis_title="SVD Predicted Value",
+                yaxis_title="PMF Predicted Value",
+                xaxis=dict(range=[minimum, maximum]),
+                yaxis=dict(range=[minimum, maximum]),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                margin=dict(l=40, r=30, t=60, b=40),
+                template="plotly_white",
+            )
+            return fig
+
+        def display_recommendation_overlap(svd_recs_df, pmf_recs_df):
+            svd_set = set(svd_recs_df['Title'].tolist())
+            pmf_set = set(pmf_recs_df['Title'].tolist())
+            overlap_count = len(svd_set.intersection(pmf_set))
+            total = len(svd_set) if len(svd_set) > 0 else 1
+            percent = overlap_count / total * 100
+
+            st.metric(
+                label="Recommendation Overlap Index",
+                value=f"{overlap_count} / {len(svd_set)} Movies",
+                delta=f"{percent:.1f}% Commonality",
+                delta_color="off"
+            )
+
+            if overlap_count > 0:
+                with st.expander("See Mutually Recommended Titles"):
+                    for movie in sorted(svd_set.intersection(pmf_set)):
+                        st.markdown(f"⭐ **{movie}**")
+            else:
+                st.info("💡 **Zero Overlap:** The algorithms are exploring completely unique spaces for this user profile.")
+
+        tab1, tab2, tab3 = st.tabs(["📈 Profile Density", "🎯 Model Alignment", "🤝 Recommendation Overlap"])
+        with tab1:
+            st.markdown("### Structural Distribution Profiles")
+            st.write("Notice how SVD shifts safely toward the historical global mean, while PMF pushes toward structural extremes to find high-reward niche titles.")
+            fig1 = plot_rating_distributions(user_idx, svd_matrix, pmf_matrix)
+            st.plotly_chart(fig1, width='stretch')
+
+        with tab2:
+            st.markdown("### Point-by-Point Evaluation Comparison")
+            st.write("Points far away from the dotted line show movies where the two models fundamentally disagree on the user's taste profile.")
+            fig2 = plot_prediction_agreement(user_idx, svd_matrix, pmf_matrix)
+            st.plotly_chart(fig2, width='stretch')
+
+        with tab3:
+            st.markdown("### Recommendation Ecosystem Intersection")
+            display_recommendation_overlap(svd_recs, pmf_recs)
 
         st.write("---")
 
